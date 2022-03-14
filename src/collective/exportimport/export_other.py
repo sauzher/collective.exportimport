@@ -446,7 +446,7 @@ class ExportDefaultPages(BrowserView):
         if not self.request.form.get("form.submitted", False):
             return self.index()
 
-        all_default_pages = self.all_default_pages()
+        all_default_pages = self.all_default_pages(self.context)
         data = json.dumps(all_default_pages, indent=4)
         filename = "defaultpages.json"
         self.request.response.setHeader("Content-type", "application/json")
@@ -456,7 +456,7 @@ class ExportDefaultPages(BrowserView):
         )
         return self.request.response.write(safe_bytes(data))
 
-    def all_default_pages(self):
+    def all_default_pages(self, context=None):
         results = []
 
         def get_default_page(obj, path):
@@ -469,7 +469,8 @@ class ExportDefaultPages(BrowserView):
             return
 
         portal = api.portal.get()
-        portal.ZopeFindAndApply(portal, search_sub=True, apply_func=get_default_page)
+        context = context or portal
+        portal.ZopeFindAndApply(context, search_sub=True, apply_func=get_default_page)
         portal_default_page = portal.getDefaultPage()
         if portal_default_page:
             results.append({"uuid": config.SITE_ROOT, "default_page": portal_default_page})
