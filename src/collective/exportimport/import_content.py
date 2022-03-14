@@ -736,8 +736,9 @@ class ResetModifiedAndCreatedDate(BrowserView):
             return self.index()
 
         portal = api.portal.get()
+        context = self.context
 
-        portal.ZopeFindAndApply(portal, search_sub=True, apply_func=reset_dates)
+        portal.ZopeFindAndApply(context, search_sub=True, apply_func=reset_dates)
         msg = "Finished resetting creation and modification dates."
         logger.info(msg)
         api.portal.show_message(msg, self.request)
