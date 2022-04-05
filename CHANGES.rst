@@ -7,7 +7,8 @@ Changelog
 
 - Export import of redirect tool data
   [gotcha, Michael Penninck]
-
+- Context subtree export of portlets
+  [sauzher]
 
 1.4 (2022-01-07)
 ----------------
