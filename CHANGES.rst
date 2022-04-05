@@ -7,9 +7,10 @@ Changelog
 
 - Export import of redirect tool data
   [gotcha, Michael Penninck]
-- Serialize Products.TALESField fields as raw instead of evaluated expression 
+- Serialize Products.TALESField fields as raw instead of evaluated expression
   (useful to export PFG overrides)
   [sauzher]
+- contextual export of localroles
 
 
 1.4 (2022-01-07)

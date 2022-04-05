@@ -369,7 +369,15 @@ class ExportLocalRoles(BrowserView):
         self.results = []
 
         portal = api.portal.get()
-        portal.ZopeFindAndApply(portal, search_sub=True, apply_func=self.get_localroles)
+        context = self.context
+        # get the context data
+        if context is not portal:
+            portal.ZopeFindAndApply(context.aq_parent,
+                                    obj_ids=[context.getId()],
+                                    search_sub=True, apply_func=self.get_localroles)
+
+        # get the from context subtree data
+        portal.ZopeFindAndApply(context, search_sub=True, apply_func=self.get_localroles)
         return self.results
 
     def get_localroles(self, obj, path):
