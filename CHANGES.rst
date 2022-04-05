@@ -10,7 +10,8 @@ Changelog
 - Serialize Products.TALESField fields as raw instead of evaluated expression
   (useful to export PFG overrides)
   [sauzher]
-- contextual export of localroles
+- context subtree export of localroles
+  [sauzher]
 
 
 1.4 (2022-01-07)
