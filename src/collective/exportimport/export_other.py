@@ -535,7 +535,7 @@ class ExportPortlets(BrowserView):
         )
         return self.request.response.write(safe_bytes(data))
 
-    def all_portlets(context=None):
+    def all_portlets(self, ):
         results = []
 
         def get_portlets(obj, path):
@@ -555,7 +555,12 @@ class ExportPortlets(BrowserView):
             return
 
         portal = api.portal.get()
-        portal.ZopeFindAndApply(portal, search_sub=True, apply_func=get_portlets)
+        context = self.context
+        if context is not portal:
+            portal.ZopeFindAndApply(context.aq_parent, obj_ids=[context.getId()], search_sub=True, apply_func=get_portlets)
+
+        portal.ZopeFindAndApply(context, search_sub=True, apply_func=get_portlets)
+        # portal.ZopeFindAndApply(context.aq_parent, obj_ids=[context.getId()], search_sub=True, apply_func=get_portlets)
         return results
 
 

@@ -13,6 +13,8 @@ Changelog
 - context subtree export of localroles
   [sauzher]
 
+- Context subtree export of portlets
+  [sauzher]
 
 1.4 (2022-01-07)
 ----------------
