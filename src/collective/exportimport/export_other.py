@@ -445,7 +445,7 @@ class ExportOrdering(BrowserView):
             return
 
         portal = api.portal.get()
-        context = context or portal
+        context = self.context or portal
         portal.ZopeFindAndApply(
             context, search_sub=True, apply_func=get_position_in_parent
         )
@@ -665,7 +665,7 @@ def export_plone_redirects():
     storage = getUtility(IRedirectionStorage)
     redirects = {}
     for key, value in storage._paths.items():
-        if isinstance(value, tuple) and len(value)==3:
+        if isinstance(value, tuple) and len(value) == 3:
             value = value[0]
         redirects[key] = value
 
@@ -687,4 +687,3 @@ class ExportRedirects(BrowserView):
             "Content-Disposition", 'attachment; filename="{0}"'.format(filename)
         )
         return self.request.response.write(safe_bytes(data))
-
