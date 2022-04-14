@@ -299,6 +299,8 @@ class ImportRelations(BrowserView):
         return self.index()
 
     def do_import(self, data):
+        msg = u"Importing {} relations...".format(len(data))
+        logger.info(msg)
         start = datetime.now()
         self.import_relations(data)
         transaction.commit()
@@ -437,6 +439,8 @@ class ImportOrdering(BrowserView):
                 )
             else:
                 start = datetime.now()
+                msg = u"Importing {} orders...".format(len(data))
+                logger.info(msg)
                 orders = self.import_ordering(data)
                 end = datetime.now()
                 delta = end - start
@@ -488,6 +492,8 @@ class ImportDefaultPages(BrowserView):
                     request=self.request,
                 )
             else:
+                msg = u"Importing {} default pages...".format(len(data))
+                logger.info(msg)
                 defaultpages = self.import_default_pages(data)
                 msg = u"Changed {} default pages".format(defaultpages)
                 api.portal.show_message(msg, self.request)
