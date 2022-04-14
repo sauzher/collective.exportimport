@@ -45,7 +45,8 @@ class FixHTML(BrowserView):
 
         msg = []
 
-        fix_count = fix_html_in_content_fields(commit=commit)
+        fix_count = fix_html_in_content_fields(context=self.context,
+                                               commit=commit)
         msg.append(u"Fixed HTML for {} fields in content items".format(fix_count))
         logger.info(msg[-1])
 
@@ -277,6 +278,7 @@ def fix_html_in_content_fields(context=None, commit=True):
     """Run this in Plone 5.x"""
     catalog = api.portal.get_tool("portal_catalog")
     portal_types = api.portal.get_tool("portal_types")
+    context_path = '/'.join(context.getPhysicalPath())
 
     types_with_richtext_fields = defaultdict(list)
     for portal_type in portal_types.keys():
@@ -287,6 +289,7 @@ def fix_html_in_content_fields(context=None, commit=True):
     query = {}
     query["portal_type"] = list(types_with_richtext_fields.keys())
     query["sort_on"] = "path"
+    query["path"] = context_path
 
     brains = catalog(**query)
     total = len(brains)
