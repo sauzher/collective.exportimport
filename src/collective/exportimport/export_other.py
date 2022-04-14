@@ -355,6 +355,9 @@ class ExportLocalRoles(BrowserView):
         if not self.request.form.get("form.submitted", False):
             return self.index()
 
+        logger.info("Generating Json for Local Roles in the path {}".format(
+            '/'.join(self.context.getPhysicalPath())))
+
         all_localroles = self.all_localroles()
         data = json.dumps(all_localroles, indent=4)
         filename = "localroles.json"
@@ -363,6 +366,8 @@ class ExportLocalRoles(BrowserView):
         self.request.response.setHeader(
             "Content-Disposition", 'attachment; filename="{0}"'.format(filename)
         )
+        logger.info("-- json ready. {} items exported. ".format(len(data)))
+
         return self.request.response.write(safe_bytes(data))
 
     def all_localroles(self):
@@ -525,6 +530,8 @@ class ExportPortlets(BrowserView):
         if not self.request.form.get("form.submitted", False):
             return self.index()
 
+        logger.info("Generating Json for Portlets in the path {}".format(
+            '/'.join(self.context.getPhysicalPath())))
         all_portlets = self.all_portlets()
         data = json.dumps(all_portlets, indent=4)
         filename = "portlets.json"
@@ -533,6 +540,7 @@ class ExportPortlets(BrowserView):
         self.request.response.setHeader(
             "Content-Disposition", 'attachment; filename="{0}"'.format(filename)
         )
+        logger.info("-- json ready. {} items exported. ".format(len(data)))
         return self.request.response.write(safe_bytes(data))
 
     def all_portlets(self, ):
