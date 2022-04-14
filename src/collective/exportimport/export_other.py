@@ -419,6 +419,8 @@ class ExportOrdering(BrowserView):
         if not self.request.form.get("form.submitted", False):
             return self.index()
 
+        logger.info("Generating Json for Ordering  in the path {}".format(
+            '/'.join(self.context.getPhysicalPath())))
         all_orders = self.all_orders()
         data = json.dumps(all_orders, indent=4)
         filename = "ordering.json"
@@ -427,6 +429,8 @@ class ExportOrdering(BrowserView):
         self.request.response.setHeader(
             "Content-Disposition", 'attachment; filename="{0}"'.format(filename)
         )
+        logger.info("-- json ready. {} items exported. ".format(len(data)))
+
         return self.request.response.write(safe_bytes(data))
 
     def all_orders(self):
