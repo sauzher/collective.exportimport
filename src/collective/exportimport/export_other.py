@@ -445,8 +445,9 @@ class ExportOrdering(BrowserView):
             return
 
         portal = api.portal.get()
+        context = context or portal
         portal.ZopeFindAndApply(
-            portal, search_sub=True, apply_func=get_position_in_parent
+            context, search_sub=True, apply_func=get_position_in_parent
         )
         return sorted(results, key=itemgetter("order"))
 
