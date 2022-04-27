@@ -595,27 +595,27 @@ def export_local_portlets(obj):
             schema = None
             for schema in providedBy(assignment).flattened():
                 portlet_type = portlets_schemata.get(schema, None)
-                if portlet_type is not None:
-                    break
-            if portlet_type is None:
-                continue
-            assignment = assignment.__of__(mapping)
-            settings = IPortletAssignmentSettings(assignment)
-            if manager_name not in items:
-                items[manager_name] = []
-            values = {}
-            for name in schema.names():
-                value = getattr(assignment, name, None)
-                if RelationValue is not None and isinstance(value, RelationValue):
-                    value = value.to_object.UID()
-                elif isinstance(value, RichTextValue):
-                    value = {
-                        "data": json_compatible(value.raw),
-                        "content-type": json_compatible(value.mimeType),
-                        "encoding": json_compatible(value.encoding),
-                    }
-                value = json_compatible(value)
-                values[name] = value
+                #if portlet_type is not None:
+                    #break
+                if portlet_type is None:
+                    continue
+                assignment = assignment.__of__(mapping)
+                settings = IPortletAssignmentSettings(assignment)
+                if manager_name not in items:
+                    items[manager_name] = []
+                values = {}
+                for name in schema.names():
+                    value = getattr(assignment, name, None)
+                    if RelationValue is not None and isinstance(value, RelationValue):
+                        value = value.to_object.UID()
+                    elif isinstance(value, RichTextValue):
+                        value = {
+                            "data": json_compatible(value.raw),
+                            "content-type": json_compatible(value.mimeType),
+                            "encoding": json_compatible(value.encoding),
+                        }
+                    value = json_compatible(value)
+                    values[name] = value
             items[manager_name].append(
                 {
                     "type": portlet_type,
