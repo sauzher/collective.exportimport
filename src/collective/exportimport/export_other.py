@@ -545,7 +545,7 @@ class ExportPortlets(BrowserView):
         self.request.response.setHeader(
             "Content-Disposition", 'attachment; filename="{0}"'.format(filename)
         )
-        logger.info("-- json ready. {} items exported. ".format(len(data)))
+        logger.info("-- json ready. {} items exported. ".format(len(all_portlets)))
         return self.request.response.write(safe_bytes(data))
 
     def all_portlets(self, ):
@@ -593,6 +593,7 @@ def export_local_portlets(obj):
         for name, assignment in mapping.items():
             portlet_type = None
             schema = None
+            values = {}
             for schema in providedBy(assignment).flattened():                
                 #portlet_type = portlets_schemata.get(schema, None)
                 # get the first schema aware portlet type
@@ -606,7 +607,6 @@ def export_local_portlets(obj):
                 settings = IPortletAssignmentSettings(assignment)
                 if manager_name not in items:
                     items[manager_name] = []
-                values = {}
                 for name in schema.names():
                     value = getattr(assignment, name, None)
                     if RelationValue is not None and isinstance(value, RelationValue):
