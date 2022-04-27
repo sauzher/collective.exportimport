@@ -593,11 +593,14 @@ def export_local_portlets(obj):
         for name, assignment in mapping.items():
             portlet_type = None
             schema = None
-            for schema in providedBy(assignment).flattened():
-                portlet_type = portlets_schemata.get(schema, None)
-                #if portlet_type is not None:
-                    #break
-                if portlet_type is None:
+            for schema in providedBy(assignment).flattened():                
+                #portlet_type = portlets_schemata.get(schema, None)
+                # get the first schema aware portlet type
+                if not portlet_type and \
+                   portlets_schemata.get(schema, None) is not None:
+                    portlet_type = portlets_schemata.get(schema, None)
+                # discard interface without schema field attributes
+                if portlets_schemata.get(schema, None) is None:
                     continue
                 assignment = assignment.__of__(mapping)
                 settings = IPortletAssignmentSettings(assignment)
