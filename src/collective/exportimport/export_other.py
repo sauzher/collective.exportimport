@@ -570,9 +570,11 @@ class ExportPortlets(BrowserView):
         portal = api.portal.get()
         context = self.context
         if context is not portal:
-            portal.ZopeFindAndApply(context.aq_parent, obj_ids=[context.getId()], search_sub=True, apply_func=get_portlets)
+            portal.ZopeFindAndApply(context.aq_parent,
+                                    obj_ids=[context.getId()], 
+                                    search_sub=True, apply_func=get_portlets)
 
-        portal.ZopeFindAndApply(context, search_sub=True, apply_func=get_portlets)
+        #portal.ZopeFindAndApply(context, search_sub=True, apply_func=get_portlets)
         # portal.ZopeFindAndApply(context.aq_parent, obj_ids=[context.getId()], search_sub=True, apply_func=get_portlets)
         return results
 
