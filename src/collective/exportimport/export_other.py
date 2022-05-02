@@ -489,6 +489,10 @@ class ExportDefaultPages(BrowserView):
         portal = api.portal.get()
         context = context or portal
         portal.ZopeFindAndApply(context, search_sub=True, apply_func=get_default_page)
+        if context is not portal:
+            portal.ZopeFindAndApply(context.aq_parent,
+                                    obj_ids=[context.getId()],
+                                    search_sub=False, apply_func=self.get_default_page)
         portal_default_page = portal.getDefaultPage()
         if portal_default_page:
             results.append({"uuid": config.SITE_ROOT, "default_page": portal_default_page})
