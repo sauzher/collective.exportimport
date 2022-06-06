@@ -82,6 +82,7 @@ def html_fixer(text, obj=None, old_portal_url=None):
             ("href", ["a"]),
             ("src", ["source", "img", "video", "audio", "iframe"]),
             ("srcset", ["source", "img"]),
+            ("class",["table"]),
         ]
         for tag in tags
     ]:
@@ -93,6 +94,8 @@ def html_fixer(text, obj=None, old_portal_url=None):
 def fix_tag_attr(soup, tag, attr, old_portal_url, obj=None):
     """Fix the attribute every matching tag passed within the soup."""
     for content_link in soup.find_all(tag):
+        
+        content_link = uniba_clean(content_link,tag)
         origlink = content_link.get(attr)
         if not origlink:
             # Ignore tags without attr
@@ -224,6 +227,21 @@ def fix_tag_attr(soup, tag, attr, old_portal_url, obj=None):
                     tag=tag, attr=attr, orig=orig, content_link=content_link
                 )
             )
+
+def uniba_clean(content_link,tag):
+    """pulisce i link dai riferimenti da manageweb e altri domini
+       pulisce le table della class invisible"""
+    buzzword = ['manageweb.ict','w3.ict','w3']
+    if tag == 'href':
+        link = content_link['href']
+
+        for buzz in buzzword:
+            if link and buzz in link:
+                for attr in ['href','data-val']:
+                    content_link[attr] = content_link[attr].replace(buzz,'www')
+    if  tag == 'table' and content_link.attrs['class']:
+        content_link.attrs['class'] = content_link.attrs['class'][0].replace('invisible','')
+    return content_link
 
 
 def find_object(base, path):
