@@ -229,8 +229,8 @@ def fix_tag_attr(soup, tag, attr, old_portal_url, obj=None):
             )
 
 def uniba_clean(content_link,tag):
-    """pulisce i link dai riferimenti da manageweb e altri domini
-       pulisce le table della class invisible"""
+    """rimuove i link dai riferimenti da manageweb e altri domini
+       rimuove la class invisible dalle table"""
     buzzword = ['manageweb.ict','w3.ict','w3']
     if tag == 'href':
         link = content_link['href']
