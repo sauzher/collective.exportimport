@@ -95,7 +95,9 @@ def fix_tag_attr(soup, tag, attr, old_portal_url, obj=None):
     """Fix the attribute every matching tag passed within the soup."""
     for content_link in soup.find_all(tag):
         
-        content_link = uniba_clean(content_link,tag)
+        content_link = uniba_clean(content_link, tag)
+        if tag == 'table':
+            continue
         origlink = content_link.get(attr)
         if not origlink:
             # Ignore tags without attr
@@ -233,11 +235,13 @@ def uniba_clean(content_link,tag):
        replace invisible class from table tags"""
     if tag == 'a':
         buzz = 'manageweb.ict'
-        content_link['href'] = content_link['href'].replace(buzz,'www')
+        if 'href' in content_link.attrs.keys():
+            content_link['href'] = content_link['href'] and content_link['href'].replace(buzz,'www')
         if content_link.string:
             content_link.string = content_link.string.replace(buzz,'www')
     if  tag == 'table'and 'class' in content_link.attrs.keys():
-            content_link.attrs['class'] = content_link.attrs['class'][0].replace('invisible','')
+            class_list = [x for x in content_link.attrs['class'] if x !='invisible']
+            content_link.attrs['class'] = class_list
     return content_link
 
 
