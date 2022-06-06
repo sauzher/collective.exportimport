@@ -229,18 +229,13 @@ def fix_tag_attr(soup, tag, attr, old_portal_url, obj=None):
             )
 
 def uniba_clean(content_link,tag):
-    """rimuove i link dai riferimenti da manageweb e altri domini
-       rimuove la class invisible dalle table"""
-    buzzword = ['manageweb.ict','w3.ict','w3']
+    """replace buzzword in links (href and content) 
+       replace invisible class from table tags"""
     if tag == 'a':
-        for buzz in buzzword:
-            for attr in content_link.attrs.keys():
-                try:
-                    content_link[attr] = content_link[attr].replace(buzz,'www')
-                except:
-                    continue    
-            if content_link.string:
-               content_link.string = content_link.string.replace(buzz,'www')
+        buzz = 'manageweb.ict'
+        content_link['href'] = content_link['href'].replace(buzz,'www')
+        if content_link.string:
+            content_link.string = content_link.string.replace(buzz,'www')
     if  tag == 'table'and 'class' in content_link.attrs.keys():
             content_link.attrs['class'] = content_link.attrs['class'][0].replace('invisible','')
     return content_link
