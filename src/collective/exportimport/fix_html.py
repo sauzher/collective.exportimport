@@ -232,15 +232,17 @@ def uniba_clean(content_link,tag):
     """rimuove i link dai riferimenti da manageweb e altri domini
        rimuove la class invisible dalle table"""
     buzzword = ['manageweb.ict','w3.ict','w3']
-    if tag == 'href':
-        link = content_link['href']
-
+    if tag == 'a':
         for buzz in buzzword:
-            if link and buzz in link:
-                for attr in ['href','data-val']:
+            for attr in content_link.attrs.keys():
+                try:
                     content_link[attr] = content_link[attr].replace(buzz,'www')
-    if  tag == 'table' and content_link.attrs['class']:
-        content_link.attrs['class'] = content_link.attrs['class'][0].replace('invisible','')
+                except:
+                    continue    
+            if content_link.string:
+               content_link.string = content_link.string.replace(buzz,'www')
+    if  tag == 'table'and 'class' in content_link.attrs.keys():
+            content_link.attrs['class'] = content_link.attrs['class'][0].replace('invisible','')
     return content_link
 
 
