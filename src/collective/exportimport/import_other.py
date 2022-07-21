@@ -1,30 +1,32 @@
 # -*- coding: utf-8 -*-
 from Acquisition import aq_base
 from BTrees.LLBTree import LLSet
+from OFS.interfaces import IOrderedContainer
+from Products.Five import BrowserView
+from Products.ZCatalog.ProgressHandler import ZLogHandler
+from ZPublisher.HTTPRequest import FileUpload
 from collective.exportimport import config
 from datetime import datetime
-from OFS.interfaces import IOrderedContainer
 from operator import itemgetter
 from plone import api
 from plone.app.discussion.comment import Comment
 from plone.app.discussion.interfaces import IConversation
 from plone.app.portlets.interfaces import IPortletTypeInterface
 from plone.app.redirector.interfaces import IRedirectionStorage
+from plone.memoize.view import memoize
+from plone.portlets.interfaces import ILocalPortletAssignmentManager
 from plone.portlets.interfaces import IPortletAssignmentMapping
 from plone.portlets.interfaces import IPortletAssignmentSettings
-from plone.portlets.interfaces import ILocalPortletAssignmentManager
 from plone.portlets.interfaces import IPortletManager
 from plone.restapi.interfaces import IFieldDeserializer
-from Products.Five import BrowserView
-from Products.ZCatalog.ProgressHandler import ZLogHandler
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
-from zope.component import queryUtility
 from zope.component import queryMultiAdapter
+from zope.component import queryUtility
 from zope.component.interfaces import IFactory
 from zope.container.interfaces import INameChooser
 from zope.globalrequest import getRequest
-from ZPublisher.HTTPRequest import FileUpload
+
 
 import dateutil
 import json
@@ -404,6 +406,7 @@ class ImportLocalRoles(BrowserView):
                         obj.absolute_url()
                     )
                 )
+            obj.reindexObject(idxs='allowedRolesAndUsers')
             if not index % 1000:
                 logger.info(u"Set local roles on {} ({}%) of {} items".format(index, round(index / total * 100, 2), total))
             results += 1
@@ -411,7 +414,9 @@ class ImportLocalRoles(BrowserView):
             logger.info("Reindexing Security")
             catalog = api.portal.get_tool("portal_catalog")
             pghandler = ZLogHandler(1000)
-            catalog.reindexIndex("allowedRolesAndUsers", None, pghandler=pghandler)
+
+            #catalog.reindexIndex("allowedRolesAndUsers", None, pghandler=pghandler)
+
         return results
 
 
