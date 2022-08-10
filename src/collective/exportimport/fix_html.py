@@ -50,7 +50,7 @@ class FixHTML(BrowserView):
         msg.append(u"Fixed HTML for {} fields in content items".format(fix_count))
         logger.info(msg[-1])
 
-        fix_count = fix_html_in_portlets()
+        fix_count = fix_html_in_portlets(context=self.context)
         msg.append(u"Fixed HTML for {} portlets".format(fix_count))
         logger.info(msg[-1])
 
