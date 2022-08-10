@@ -94,7 +94,7 @@ def html_fixer(text, obj=None, old_portal_url=None):
 def fix_tag_attr(soup, tag, attr, old_portal_url, obj=None):
     """Fix the attribute every matching tag passed within the soup."""
     for content_link in soup.find_all(tag):
-        
+
         content_link = uniba_clean(content_link, tag)
         if tag == 'table':
             continue
@@ -231,7 +231,7 @@ def fix_tag_attr(soup, tag, attr, old_portal_url, obj=None):
             )
 
 def uniba_clean(content_link,tag):
-    """replace buzzword in links (href and content) 
+    """replace buzzword in links (href and content)
        replace invisible class from table tags"""
     if tag == 'a':
         buzz = 'manageweb.ict'
@@ -444,7 +444,8 @@ def fix_html_in_portlets(context=None):
                                 )
 
     portal = api.portal.get()
+    context = context or portal
     fix_count = []
     f = lambda obj, path: get_portlets(obj, path, fix_count)
-    portal.ZopeFindAndApply(portal, search_sub=True, apply_func=f)
+    portal.ZopeFindAndApply(context, search_sub=True, apply_func=f)
     return len(fix_count)
